@@ -15,10 +15,21 @@ export default function Home() {
   const [addTaskVisible, setAddTaskVisible] = useState(false);
 
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [doneTasks, setDoneTasks] = useState<Task[]>([]);
 
   const handleAddTask = (task: Task) => {
     setTasks((prevTasks) => [...prevTasks, task])
     setAddTaskVisibleFalse();
+  }
+
+  const handleDoneTask = (index: number) => {
+    const task = tasks[index];
+    setTasks((prevTasks) => prevTasks.filter((_, i) => i !== index));
+    setDoneTasks((prevDoneTasks) => [...prevDoneTasks, task]);
+  }
+
+  const handleRemoveTask= (index: number) => {
+    setTasks((prevTasks) => prevTasks.filter((_, i) => i !== index));
   }
 
   const setAddTaskVisibleTrue = () => setAddTaskVisible(true);
@@ -36,11 +47,11 @@ export default function Home() {
             concluídas.
           </p>
         </div>
-        <div>
+        <div className="pb-4">
           {tasks.map((task, index) => (
             <div
               key={index}
-              className="flex w-[500px] justify-between border-b border-slate-400 p-4"
+              className="flex w-[550px] justify-between px-4"
             >
               <div className="flex">
                 <p className="font-bold">{task.name}</p>
@@ -50,14 +61,34 @@ export default function Home() {
               <div>
                 <button
                   className="border mx-2 px-2 bg-green-200 hover:bg-green-300 border-slate-400"
+                  onClick={() => handleDoneTask(index)}
                 >
                   Done
                 </button>
                 <button
                   className="border px-2 bg-red-200 hover:bg-red-300 border-slate-400"
+                  onClick={() => handleRemoveTask(index)}
                 >
                   Remove
                 </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="border-t border-slate-400">
+          {doneTasks.length > 0 && (
+          <p className="flex font-bold text-xl justify-center py-4">
+            Done Tasks
+          </p>)}
+          {doneTasks.map((task, index) => (
+            <div
+              key={index}
+              className="flex w-[500px] justify-between px-4"
+            >
+              <div className="flex">
+                <p className="font-bold">{task.name}</p>
+                <p className="px-4">{task.description}</p>
+                <p>{task.priority}</p>
               </div>
             </div>
           ))}
@@ -74,12 +105,6 @@ export default function Home() {
         {addTaskVisible && (
           <div>
             <AddTask onAddTask={handleAddTask} />
-            <button
-              className="flex w-24 justify-center border bg-red-200 hover:bg-red-300 border-slate-400"
-              onClick={setAddTaskVisibleFalse}
-            >
-              Cancel
-            </button>
           </div>
         )}
       </div>
