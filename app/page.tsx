@@ -18,6 +18,10 @@ export default function Home() {
   const [doneTasks, setDoneTasks] = useState<Task[]>([]);
 
   const handleAddTask = (task: Task) => {
+    if (!task.name || !task.description || !task.priority) {
+      setAddTaskVisibleFalse();
+      return;
+    }
     setTasks((prevTasks) => [...prevTasks, task])
     setAddTaskVisibleFalse();
   }
@@ -30,6 +34,11 @@ export default function Home() {
 
   const handleRemoveTask= (index: number) => {
     setTasks((prevTasks) => prevTasks.filter((_, i) => i !== index));
+  }
+
+  const handleDefaultList = () => {
+    setTasks([]);
+    setDoneTasks([]);
   }
 
   const setAddTaskVisibleTrue = () => setAddTaskVisible(true);
@@ -93,12 +102,18 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="p-4">
+        <div className="flex justify-between p-4">
           <button
-            className="flex w-24 justify-center border bg-blue-200 hover:bg-blue-300 border-slate-400"
+            className="flex w-24 mt-16 justify-center border bg-blue-200 hover:bg-blue-300 border-slate-400"
             onClick={setAddTaskVisibleTrue}
           >
             Add Task
+          </button>
+          <button
+            className="flex w-24 mt-16 justify-center border bg-red-200 hover:bg-red-300 border-slate-400"
+            onClick={handleDefaultList}
+          >
+            Zerar Lista
           </button>
         </div>
 

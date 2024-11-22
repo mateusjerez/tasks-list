@@ -17,12 +17,14 @@ export default function AddTask({ onAddTask }: Task) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (name && description) {
+       
             onAddTask({ name, description, priority, completed: false });
             setName('');
             setDescription('');
-        }
+            setPriority('low');
+       
     }
+
 
     return(
         <div className='flex fixed bottom-0 left-0 size-full bg-black/20'>
@@ -51,12 +53,20 @@ export default function AddTask({ onAddTask }: Task) {
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
                     </select>
-                    <button
-                        type="submit"
-                        className="border border-slate-400 p-2 mt-2"
-                    >
-                        Add Task
-                    </button>
+                    <div className='flex justify-between'>
+                        <button
+                            type="submit"
+                            className="border border-slate-400 bg-green-200 hover:bg-green-300 px-2 mt-2"
+                        >
+                            Add Task
+                        </button>
+                        <button
+                            type="submit"
+                            className="border border-slate-400 bg-red-200 hover:bg-red-300 px-2 mt-2"
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
