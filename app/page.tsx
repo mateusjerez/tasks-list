@@ -1,17 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import AddTask from "../app/components/addTask";
+
+
+type Task = {
+  name: string;
+  description: string;
+  priority: string;
+  completed: boolean;
+}; 
 
 export default function Home() {
   const [addTaskVisible, setAddTaskVisible] = useState(false);
 
-  const setAddTaskVisibleTrue = () => {
-    setAddTaskVisible(true);
-  };
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const setAddTaskVisibleFalse = () => {
-    setAddTaskVisible(false);
-  };
+  const handleAddTask = (task: Task) => {
+    setTasks((prevTasks) => [...prevTasks, task])
+    setAddTaskVisibleFalse();
+  }
+
+  const setAddTaskVisibleTrue = () => setAddTaskVisible(true);
+  const setAddTaskVisibleFalse = () => setAddTaskVisible(false);
 
   return (
     <div className="flex justify-center">
@@ -25,6 +36,32 @@ export default function Home() {
             concluídas.
           </p>
         </div>
+        <div>
+          {tasks.map((task, index) => (
+            <div
+              key={index}
+              className="flex w-[500px] justify-between border-b border-slate-400 p-4"
+            >
+              <div className="flex">
+                <p className="font-bold">{task.name}</p>
+                <p className="px-4">{task.description}</p>
+                <p>{task.priority}</p>
+              </div>
+              <div>
+                <button
+                  className="border mx-2 px-2 bg-green-200 hover:bg-green-300 border-slate-400"
+                >
+                  Done
+                </button>
+                <button
+                  className="border px-2 bg-red-200 hover:bg-red-300 border-slate-400"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="p-4">
           <button
             className="flex w-24 justify-center border bg-blue-200 hover:bg-blue-300 border-slate-400"
@@ -36,40 +73,13 @@ export default function Home() {
 
         {addTaskVisible && (
           <div>
-            <div className="size-full fixed top-0 left-0 bg-black/10">
-              <div className="flex-col size-[400px] relative my-10 mx-auto">
-                <button className="absolute top-3 right-4"
-                onClick={setAddTaskVisibleFalse}>
-                  X
-                </button>
-                <div className="flex justify-center">
-                  <div className="w-[400px] bg-white p-4">
-                    <p className="font-bold text-xl">Add Task</p>
-                    <div className="flex flex-col">
-                      <label className="p-2">Task Name</label>
-                      <input className="p-2 border border-gray-300" />
-                    </div>
-                    <div className="flex flex-col">
-                      <label className="p-2">Task Description</label>
-                      <input className="p-2 border border-gray-300" />
-                    </div>
-                    <div className="flex flex-col">
-                      <label className="p-2">Task Priority</label>
-                      <select className="p-2 border border-gray-300">
-                        <option>Low</option>
-                        <option>Medium</option>
-                        <option>High</option>
-                      </select>
-                    </div>
-                    <div className="flex justify-center mt-4">
-                      <button className="w-24 border bg-blue-200 hover:bg-blue-300 border-slate-400">
-                        Add
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <AddTask onAddTask={handleAddTask} />
+            <button
+              className="flex w-24 justify-center border bg-red-200 hover:bg-red-300 border-slate-400"
+              onClick={setAddTaskVisibleFalse}
+            >
+              Cancel
+            </button>
           </div>
         )}
       </div>
